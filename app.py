@@ -126,15 +126,109 @@ st.markdown("""
         color: white;
         font-weight: bold;
     }
+    
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+        .main {
+            padding: 1rem;
+        }
+        
+        h1 {
+            font-size: 2rem !important;
+        }
+        
+        h2 {
+            font-size: 1.5rem !important;
+        }
+        
+        h3 {
+            font-size: 1.2rem !important;
+        }
+        
+        .stMetric {
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 1.2rem !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.9rem !important;
+        }
+        
+        .stButton>button {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+        
+        .stDownloadButton>button {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+        
+        /* Make charts responsive */
+        .stpyplot {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Adjust columns for mobile */
+        [data-testid="column"] {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+        
+        /* Sidebar adjustments */
+        [data-testid="stSidebar"] {
+            width: 100% !important;
+        }
+        
+        /* Fix overflow on small screens */
+        .dataframe {
+            overflow-x: auto;
+            display: block;
+            max-width: 100%;
+        }
+        
+        /* Expander adjustments */
+        [data-testid="stExpander"] {
+            padding: 10px;
+        }
+        
+        /* Info boxes mobile friendly */
+        .stAlert {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+    }
+    
+    /* Tablet Responsive */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .main {
+            padding: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem !important;
+        }
+        
+        .stMetric {
+            padding: 18px;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # ---- Animated Title ----
 st.markdown("""
-    <h1 style='text-align: center; font-size: 3.5rem; margin-bottom: 1rem;'>
+    <h1 style='text-align: center; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem;'>
         🌦️ Weather & Health Dashboard
     </h1>
-    <p style='text-align: center; color: white; font-size: 1.2rem; margin-bottom: 2rem;'>
+    <p style='text-align: center; color: white; font-size: clamp(0.9rem, 2vw, 1.2rem); margin-bottom: 2rem;'>
         Track environmental factors and their impact on public health
     </p>
 """, unsafe_allow_html=True)
@@ -246,14 +340,15 @@ elif section == "📈 Visualizations":
     # Hospital Visits Over Time
     with st.container():
         st.markdown("### 🏥 Hospital Visits Trend")
-        fig, ax = plt.subplots(figsize=(10,5))
+        fig, ax = plt.subplots(figsize=(12,5))
         ax.plot(df["Month"], df["Hospital_Visits"], marker='o', color='#667eea', linewidth=2.5, markersize=8)
         ax.set_xlabel("Month", fontsize=12, fontweight='bold')
         ax.set_ylabel("Hospital Visits", fontsize=12, fontweight='bold')
         ax.grid(True, alpha=0.3)
         ax.set_facecolor('#f7fafc')
         plt.xticks(rotation=45)
-        st.pyplot(fig)
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
     
     st.divider()
 
@@ -262,24 +357,26 @@ elif section == "📈 Visualizations":
 
     with col1:
         st.markdown("### 💨 AQI Distribution")
-        fig, ax = plt.subplots(figsize=(6,4))
+        fig, ax = plt.subplots(figsize=(8,5))
         ax.hist(df["AQI"], bins=10, color='#f093fb', edgecolor='#764ba2', linewidth=1.5)
         ax.set_xlabel("AQI", fontweight='bold')
         ax.set_ylabel("Frequency", fontweight='bold')
         ax.grid(True, alpha=0.3, axis='y')
         ax.set_facecolor('#f7fafc')
-        st.pyplot(fig)
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
 
     with col2:
         st.markdown("### 🌧️ Rainfall Distribution")
-        fig, ax = plt.subplots(figsize=(6,4))
+        fig, ax = plt.subplots(figsize=(8,5))
         bp = ax.boxplot(df["Rainfall"], patch_artist=True)
         bp['boxes'][0].set_facecolor('#667eea')
         bp['boxes'][0].set_alpha(0.7)
         ax.set_ylabel("Rainfall (mm)", fontweight='bold')
         ax.grid(True, alpha=0.3, axis='y')
         ax.set_facecolor('#f7fafc')
-        st.pyplot(fig)
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
 
     st.divider()
 
@@ -287,7 +384,7 @@ elif section == "📈 Visualizations":
     with st.container():
         st.markdown("### 🔥 Correlation Heatmap")
         corr = df[["Temperature","Rainfall","Humidity","AQI","Hospital_Visits"]].corr()
-        fig, ax = plt.subplots(figsize=(8,6))
+        fig, ax = plt.subplots(figsize=(10,8))
         cax = ax.matshow(corr, cmap='coolwarm')
         plt.xticks(range(len(corr.columns)), corr.columns, rotation=45, ha='left')
         plt.yticks(range(len(corr.columns)), corr.columns)
@@ -298,7 +395,8 @@ elif section == "📈 Visualizations":
             for j in range(len(corr)):
                 ax.text(j, i, f'{corr.iloc[i, j]:.2f}', 
                        ha='center', va='center', color='white', fontweight='bold')
-        st.pyplot(fig)
+        plt.tight_layout()
+        st.pyplot(fig, use_container_width=True)
 
 # ------------------ ML Model ------------------
 elif section == "🤖 ML Model":
@@ -343,13 +441,14 @@ elif section == "🤖 ML Model":
     st.markdown("### 🔍 Feature Explorer")
     feature = st.selectbox("Select a feature to visualize", df.columns, index=0)
     
-    fig, ax = plt.subplots(figsize=(10,4))
+    fig, ax = plt.subplots(figsize=(12,5))
     ax.plot(df[feature], marker='o', color='#764ba2', linewidth=2)
     ax.set_xlabel("Index", fontweight='bold')
     ax.set_ylabel(feature, fontweight='bold')
     ax.grid(True, alpha=0.3)
     ax.set_facecolor('#f7fafc')
-    st.pyplot(fig)
+    plt.tight_layout()
+    st.pyplot(fig, use_container_width=True)
 
 # ------------------ Insights ------------------
 elif section == "💡 Insights":
@@ -400,6 +499,6 @@ elif section == "💡 Insights":
 st.markdown("---")
 st.markdown("""
     <div style='text-align: center; color: white; padding: 20px;'>
-        <p>Built with  using Streamlit | Data Analytics Dashboard</p>
+        <p>Built with using Streamlit | Data Analytics Dashboard</p>
     </div>
 """, unsafe_allow_html=True)
