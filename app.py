@@ -41,7 +41,7 @@ st.markdown("""
     
     /* Card-like containers */
     .stMetric {
-        background: white;
+        background: #6bbfff;
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -502,3 +502,4 @@ st.markdown("""
         <p>Built with using Streamlit | Data Analytics Dashboard</p>
     </div>
 """, unsafe_allow_html=True)
+
