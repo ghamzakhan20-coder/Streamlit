@@ -115,7 +115,7 @@ st.markdown("""
     
     /* Container backgrounds */
     [data-testid="stExpander"] {
-        background: rgba(255, 255, 255, 0.95);
+        background: #6bbfff;
         border-radius: 15px;
         border: none;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -502,4 +502,5 @@ st.markdown("""
         <p>Built with using Streamlit | Data Analytics Dashboard</p>
     </div>
 """, unsafe_allow_html=True)
+
 
